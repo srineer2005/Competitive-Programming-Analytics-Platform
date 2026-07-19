@@ -19,6 +19,7 @@ CP: {
 CP: {
     INVALID_CODEFORCES_USERNAME: "Invalid Codeforces username",
     CONTEST_HISTORY_FETCH_FAILED: "Unable to fetch contest history",
+    SUBMISSION_HISTORY_FETCH_FAILED: "Unable to fetch submission history",
 },
 };
 

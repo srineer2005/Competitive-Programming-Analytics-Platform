@@ -38,6 +38,8 @@ const registerUser = async (userData) => {
 
     return createdUser;
 };
+
+
 const loginUser = async (loginData) => {
 
     const user = await findUserByEmailWithPassword(loginData.email);

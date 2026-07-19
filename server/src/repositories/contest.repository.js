@@ -4,10 +4,10 @@ const createMany = async (contests) => {
     return ContestHistory.insertMany(contests);
 };
 
-const findByUser = async (userId, platform) => {
+const findByUser = async (userId) => {
     return ContestHistory.find({
         user: userId,
-        platform,
+        platform: "codeforces",
     }).sort({
         contestTime: 1,
     });

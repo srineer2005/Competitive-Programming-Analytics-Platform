@@ -1,0 +1,5 @@
+getCodeforcesProfile()
+
+getCodeforcesContestHistory()
+
+getCodeforcesSubmissionHistory()
