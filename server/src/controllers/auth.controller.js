@@ -1,7 +1,12 @@
 const HTTP_STATUS = require("../constants/httpStatus");
 const MESSAGES = require("../constants/messages");
+
 const {
     registerUser,
+    verifyEmail,
+    resendVerificationEmail,
+    forgotPassword,
+    resetPassword,
     loginUser,
     getCurrentUser,
 } = require("../services/auth.service");
@@ -10,36 +15,85 @@ const ApiResponse = require("../utils/ApiResponse");
 const asyncHandler = require("../utils/asyncHandler");
 
 const register = asyncHandler(async (req, res) => {
-
-    const createdUser = await registerUser(req.body);
+    const { user: createdUser } = await registerUser(req.body);
 
     return res.status(HTTP_STATUS.CREATED).json(
         new ApiResponse(
             HTTP_STATUS.CREATED,
-            createdUser,
+            { user: createdUser },
             MESSAGES.AUTH.REGISTER_SUCCESS
         )
     );
-
 });
-const login = asyncHandler(async (req, res) => {
 
+const verify = asyncHandler(async (req, res) => {
+    const result = await verifyEmail(req.query.token);
+
+    return res.status(HTTP_STATUS.OK).json(
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            null,
+            result.message
+        )
+    );
+});
+
+const resendVerification = asyncHandler(async (req, res) => {
+    const result = await resendVerificationEmail(
+        req.body.email
+    );
+
+    return res.status(HTTP_STATUS.OK).json(
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            null,
+            result.message
+        )
+    );
+});
+
+const forgot = asyncHandler(async (req, res) => {
+    const result = await forgotPassword(
+        req.body.email
+    );
+
+    return res.status(HTTP_STATUS.OK).json(
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            null,
+            result.message
+        )
+    );
+});
+
+const reset = asyncHandler(async (req, res) => {
+    const result = await resetPassword(
+        req.body.token,
+        req.body.newPassword
+    );
+
+    return res.status(HTTP_STATUS.OK).json(
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            null,
+            result.message
+        )
+    );
+});
+
+const login = asyncHandler(async (req, res) => {
     const { user, token } = await loginUser(req.body);
 
     return res.status(HTTP_STATUS.OK).json(
         new ApiResponse(
             HTTP_STATUS.OK,
-            {
-                user,
-                token,
-            },
+            { user, token },
             MESSAGES.AUTH.LOGIN_SUCCESS
         )
     );
-
 });
-const me = asyncHandler(async (req, res) => {
 
+const me = asyncHandler(async (req, res) => {
     const user = await getCurrentUser(req.user.id);
 
     return res.status(HTTP_STATUS.OK).json(
@@ -49,11 +103,14 @@ const me = asyncHandler(async (req, res) => {
             MESSAGES.AUTH.USER_FETCH_SUCCESS
         )
     );
-
 });
 
 module.exports = {
     register,
+    verify,
+    resendVerification,
+    forgot,
+    reset,
     login,
     me,
 };

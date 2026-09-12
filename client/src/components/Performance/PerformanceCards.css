@@ -1,0 +1,117 @@
+.performance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.performance-card {
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e8e3d8;
+    border-radius: 16px;
+    padding: 22px 22px 24px;
+    box-shadow: 0 5px 18px rgba(50, 55, 48, 0.06);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.performance-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(50, 55, 48, 0.1);
+}
+
+.performance-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 4px;
+}
+
+.performance-card-green::after {
+    background: #347744;
+}
+
+.performance-card-yellow::after {
+    background: #e5b82e;
+}
+
+.performance-card-orange::after {
+    background: #e28a32;
+}
+
+.performance-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.performance-card-label {
+    color: #686c65;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.performance-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.performance-card-green .performance-card-icon {
+    color: #347744;
+    background: #eaf4eb;
+}
+
+.performance-card-yellow .performance-card-icon {
+    color: #9a7910;
+    background: #fff5d5;
+}
+
+.performance-card-orange .performance-card-icon {
+    color: #c36d1d;
+    background: #fff0df;
+}
+
+.performance-card p {
+    margin: 0;
+    color: #252a26;
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+    .performance-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .performance-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 20px;
+    }
+
+    .performance-card {
+        padding: 20px;
+    }
+
+    .performance-card p {
+        font-size: 30px;
+    }
+}

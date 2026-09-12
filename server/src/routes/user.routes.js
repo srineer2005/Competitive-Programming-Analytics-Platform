@@ -5,6 +5,7 @@ const validate = require("../middleware/validate.middleware");
 
 const {
     updateCodingProfiles,
+    getCodingProfiles,
 } = require("../controllers/user.controller");
 
 const {
@@ -12,6 +13,12 @@ const {
 } = require("../validators/user.validator");
 
 const router = express.Router();
+
+router.get(
+    "/coding-profiles",
+    auth,
+    getCodingProfiles
+);
 
 router.put(
     "/coding-profiles",

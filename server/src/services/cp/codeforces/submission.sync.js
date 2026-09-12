@@ -1,32 +1,39 @@
 const { getCodeforcesSubmissionHistory } = require("./service");
 
-const {
-    createMany,
-    findLatestSubmission,
-} = require("../../../repositories/submission.repository");
+const Submission = require("../../../models/submission.model");
 
 const syncSubmissionHistory = async (userId, handle) => {
+    console.log("CF Submission Sync: fetching submissions for", handle);
+
     const submissions = await getCodeforcesSubmissionHistory(handle);
 
-    const latestSubmission = await findLatestSubmission(userId);
+    console.log(
+        "CF Submission Sync: fetched",
+        submissions.length,
+        "submissions"
+    );
 
-    let newSubmissions = submissions;
+    await Submission.deleteMany({
+        user: userId,
+        platform: "codeforces",
+    });
 
-    if (latestSubmission) {
-        newSubmissions = submissions.filter(
-            (submission) =>
-                submission.submissionId > latestSubmission.submissionId
-        );
-    }
+    console.log("CF Submission Sync: old submissions deleted");
 
-    const submissionsToSave = newSubmissions.map((submission) => ({
+    const submissionsToSave = submissions.map((submission) => ({
         user: userId,
         platform: "codeforces",
         ...submission,
     }));
 
     if (submissionsToSave.length > 0) {
-        await createMany(submissionsToSave);
+        await Submission.insertMany(submissionsToSave);
+
+        console.log(
+            "CF Submission Sync: saved",
+            submissionsToSave.length,
+            "submissions"
+        );
     }
 
     return {

@@ -2,6 +2,10 @@ const express = require("express");
 
 const {
     register,
+    verify,
+    resendVerification,
+    forgot,
+    reset,
     login,
     me,
 } = require("../controllers/auth.controller");
@@ -22,6 +26,26 @@ router.post(
     "/register",
     validate(registerSchema),
     register
+);
+
+router.get(
+    "/verify-email",
+    verify
+);
+
+router.post(
+    "/resend-verification",
+    resendVerification
+);
+
+router.post(
+    "/forgot-password",
+    forgot
+);
+
+router.post(
+    "/reset-password",
+    reset
 );
 
 router.post(

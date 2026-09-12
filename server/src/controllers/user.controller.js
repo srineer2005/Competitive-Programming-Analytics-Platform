@@ -6,6 +6,7 @@ const MESSAGES = require("../constants/messages");
 
 const {
     updateUserCodingProfiles,
+    getUserCodingProfiles,
 } = require("../services/user.service");
 
 const updateCodingProfiles = asyncHandler(async (req, res) => {
@@ -22,7 +23,19 @@ const updateCodingProfiles = asyncHandler(async (req, res) => {
         )
     );
 });
+const getCodingProfiles = asyncHandler(async (req, res) => {
+    const profiles = await getUserCodingProfiles(req.user.id);
+
+    return res.status(HTTP_STATUS.OK).json(
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            profiles,
+            "Coding profiles fetched successfully."
+        )
+    );
+});
 
 module.exports = {
     updateCodingProfiles,
+    getCodingProfiles,
 };

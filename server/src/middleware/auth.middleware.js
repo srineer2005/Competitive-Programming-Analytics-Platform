@@ -20,9 +20,13 @@ const auth = async (req, res, next) => {
 
         const token = authHeader.split(" ")[1];
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("Received token:", token);
 
-        const { id } = jwt.verify(token, process.env.JWT_SECRET);
+const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+console.log("Decoded token:", decoded);
+
+const { id } = decoded;
 
         const user = await User.findById(id);
 
@@ -37,13 +41,15 @@ const auth = async (req, res, next) => {
 
         next();
     } catch (error) {
-        next(
-            new ApiError(
-                HTTP_STATUS.UNAUTHORIZED,
-                MESSAGES.AUTH.INVALID_TOKEN
-            )
-        );
-    }
+    console.error("Auth middleware error:", error);
+
+    next(
+        new ApiError(
+            HTTP_STATUS.UNAUTHORIZED,
+            MESSAGES.AUTH.INVALID_TOKEN
+        )
+    );
+}
 };
 
 module.exports = auth;

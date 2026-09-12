@@ -4,8 +4,24 @@ const findUserByEmail = async (email) => {
     return await User.findOne({ email });
 };
 
+const findUserByUsername = async (username) => {
+    return await User.findOne({ username });
+};
+
 const findUserByEmailWithPassword = async (email) => {
     return await User.findOne({ email }).select("+password");
+};
+
+const findUserByVerificationToken = async (token) => {
+    return await User.findOne({
+        emailVerificationToken: token,
+    });
+};
+
+const findUserByPasswordResetToken = async (token) => {
+    return await User.findOne({
+        passwordResetToken: token,
+    });
 };
 
 const createUser = async (userData) => {
@@ -18,7 +34,16 @@ const findUserById = async (id) => {
     return await User.findById(id).select("-password");
 };
 
-const updateCodingProfiles = async (userId, profileData) => {
+const getCodingProfiles = async (userId) => {
+    return await User.findById(userId).select(
+        "codeforces leetcode codechef"
+    );
+};
+
+const updateCodingProfiles = async (
+    userId,
+    profileData
+) => {
     return await User.findByIdAndUpdate(
         userId,
         profileData,
@@ -29,10 +54,50 @@ const updateCodingProfiles = async (userId, profileData) => {
     ).select("-password");
 };
 
+const updateEmailVerification = async (
+    userId,
+    token,
+    expires
+) => {
+    return await User.findByIdAndUpdate(
+        userId,
+        {
+            emailVerificationToken: token,
+            emailVerificationExpires: expires,
+        },
+        {
+            new: true,
+        }
+    );
+};
+
+const updatePasswordReset = async (
+    userId,
+    token,
+    expires
+) => {
+    return await User.findByIdAndUpdate(
+        userId,
+        {
+            passwordResetToken: token,
+            passwordResetExpires: expires,
+        },
+        {
+            new: true,
+        }
+    );
+};
+
 module.exports = {
     findUserByEmail,
+    findUserByUsername,
     findUserByEmailWithPassword,
+    findUserByVerificationToken,
+    findUserByPasswordResetToken,
     createUser,
     findUserById,
+    getCodingProfiles,
     updateCodingProfiles,
+    updateEmailVerification,
+    updatePasswordReset,
 };

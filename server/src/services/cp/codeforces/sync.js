@@ -5,45 +5,54 @@ const {
     findByUser,
 } = require("../../../repositories/contest.repository");
 
-/**
- * Sync Codeforces contest history for a user.
- *
- * If contests are already stored, return them.
- * Otherwise fetch from Codeforces, save to MongoDB,
- * and return the saved contests.
- */
+const ContestHistory = require("../../../models/ContestHistory");
+
 const syncContestHistory = async (userId, handle) => {
-    // Check if contests already exist
-    const existingContests = await findByUser(
-        userId,
-        "codeforces"
+    console.log("CF Contest Sync: fetching contests for", handle);
+
+    const contests = await getCodeforcesContestHistory(handle);
+
+    console.log(
+        "CF Contest Sync: fetched",
+        contests.length,
+        "contests"
+    );
+
+    const existingContests = await findByUser(userId);
+
+    console.log(
+        "CF Contest Sync: existing contests",
+        existingContests.length
     );
 
     if (existingContests.length > 0) {
-        return {
-            source: "database",
-            totalContests: existingContests.length,
-            contests: existingContests,
-        };
+        await ContestHistory.deleteMany({
+            user: userId,
+            platform: "codeforces",
+        });
+
+        console.log("CF Contest Sync: old contests deleted");
     }
 
-    // Fetch from Codeforces
-    const contests = await getCodeforcesContestHistory(handle);
-
-    // Prepare documents
     const contestsToSave = contests.map((contest) => ({
         user: userId,
         platform: "codeforces",
         ...contest,
     }));
 
-    // Save to MongoDB
-    await createMany(contestsToSave);
+    if (contestsToSave.length > 0) {
+        await createMany(contestsToSave);
+
+        console.log(
+            "CF Contest Sync: saved",
+            contestsToSave.length,
+            "contests"
+        );
+    }
 
     return {
         source: "codeforces",
         totalContests: contestsToSave.length,
-        contests: contestsToSave,
     };
 };
 

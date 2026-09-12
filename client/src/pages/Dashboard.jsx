@@ -1,44 +1,92 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar/Navbar";
-import Leaderboard from "../components/Leaderboard/Leaderboard";
+import Layout from "../components/Layout/Layout";
+import SummaryCards from "../components/SummaryCards/SummaryCards";
+import GlobalLeaderboard from "../components/GlobalLeaderboard/GlobalLeaderboard";
 import { getDashboard } from "../services/dashboard.service";
 
 function Dashboard() {
-  const [dashboard, setDashboard] = useState(null);
-  const [loading, setLoading] = useState(true);
+    const [dashboard, setDashboard] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
-  useEffect(() => {
-  const fetchDashboard = async () => {
-  try {
-    const response = await getDashboard();
+    useEffect(() => {
+        const fetchDashboard = async () => {
+            try {
+                setLoading(true);
+                setError("");
 
-    console.log("Dashboard API Response:", response);
-console.log("Dashboard Data:", response.data);
-console.log("Dashboard JSON:", JSON.stringify(response.data, null, 2));
+                const response = await getDashboard();
 
-    setDashboard(response.data);
-  } catch (error) {
-    console.error("Dashboard Error:", error);
-  } finally {
-    setLoading(false);
-  }
-};
+                setDashboard(response.data);
+            } catch (error) {
+                console.error(
+                    "Failed to load dashboard:",
+                    error
+                );
 
-  fetchDashboard();
-}, []);
+                setError(
+                    error.response?.data?.message ||
+                        "Unable to load dashboard."
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
 
-  if (loading) {
-    return <h2>Loading...</h2>;
-  }
+        fetchDashboard();
+    }, []);
 
-  return (
-  <>
-    <Navbar />
-    <div style={{ padding: "30px" }}>
-      <pre>{JSON.stringify(dashboard, null, 2)}</pre>
-    </div>
-  </>
-);
+    if (loading) {
+        return (
+            <Layout>
+                <div className="dashboard-loading">
+                    <h2>Loading dashboard...</h2>
+                    <p>
+                        Fetching your coding statistics.
+                    </p>
+                </div>
+            </Layout>
+        );
+    }
+
+    if (error) {
+        return (
+            <Layout>
+                <div className="dashboard-error">
+                    <h2>Unable to load dashboard</h2>
+                    <p>{error}</p>
+                </div>
+            </Layout>
+        );
+    }
+
+    if (!dashboard) {
+        return null;
+    }
+
+    return (
+        <Layout>
+            <div className="dashboard-page">
+                <div className="dashboard-welcome">
+                    <h1>
+                        Welcome back,{" "}
+                        {dashboard.user?.username} 👋
+                    </h1>
+
+                    <p>
+                        Track your coding progress across
+                        your platforms.
+                    </p>
+                </div>
+
+                <SummaryCards
+                    summary={dashboard.summary}
+                />
+
+                <GlobalLeaderboard />
+            </div>
+        </Layout>
+    );
 }
 
 export default Dashboard;

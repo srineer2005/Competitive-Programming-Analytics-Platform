@@ -1,0 +1,509 @@
+/* =========================================
+   PERFORMANCE PAGE
+========================================= */
+
+.performance-page {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 28px;
+
+    padding-bottom: 50px;
+}
+
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.performance-header {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    padding: 8px 0 2px;
+}
+
+.performance-header-content {
+    min-width: 0;
+}
+
+.performance-eyebrow {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #d47b2a;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.6px;
+}
+
+.performance-header h1 {
+    margin: 0;
+
+    color: #252a26;
+
+    font-size: 31px;
+
+    line-height: 1.15;
+
+    font-weight: 750;
+
+    letter-spacing: -0.7px;
+}
+
+.performance-header p {
+    margin: 8px 0 0;
+
+    color: #72776f;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   TOTAL PROBLEMS
+========================================= */
+
+.performance-total {
+    min-width: 175px;
+
+    padding: 17px 20px;
+
+    background: #fffaf0;
+
+    border: 1px solid #eee1c7;
+
+    border-radius: 14px;
+
+    text-align: right;
+
+    box-shadow:
+        0 4px 14px rgba(
+            55,
+            50,
+            35,
+            0.045
+        );
+}
+
+.performance-total span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #8b8170;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+}
+
+.performance-total strong {
+    color: #b66b24;
+
+    font-size: 25px;
+
+    line-height: 1;
+
+    font-weight: 750;
+}
+
+
+/* =========================================
+   PLATFORM SECTION
+========================================= */
+
+.performance-platform-section {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+    padding: 26px;
+
+    background: #faf9f5;
+
+    border: 1px solid #e7e2d7;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 4px 18px rgba(
+            55,
+            50,
+            35,
+            0.035
+        );
+}
+
+
+/* =========================================
+   PLATFORM HEADING
+========================================= */
+
+.platform-heading {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+.platform-icon {
+    width: 47px;
+    height: 47px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    font-size: 13px;
+
+    font-weight: 850;
+
+    letter-spacing: -0.3px;
+}
+
+
+/* Codeforces */
+
+.codeforces-icon {
+    background: #eaf4eb;
+
+    color: #347744;
+
+    border: 1px solid #d6e7d8;
+}
+
+
+/* LeetCode */
+
+.leetcode-icon {
+    background: #fff0df;
+
+    color: #c56e25;
+
+    border: 1px solid #f0d3b3;
+}
+
+
+.platform-heading-content {
+    min-width: 0;
+}
+
+.platform-title-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    flex-wrap: wrap;
+}
+
+.platform-heading h2 {
+    margin: 0;
+
+    color: #252a26;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.3px;
+}
+
+.platform-heading p {
+    margin: 4px 0 0;
+
+    color: #777c75;
+
+    font-size: 12px;
+}
+
+
+/* =========================================
+   PLATFORM TAG
+========================================= */
+
+.platform-tag {
+    padding: 4px 7px;
+
+    border-radius: 5px;
+
+    background: #eaf4eb;
+
+    color: #347744;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.8px;
+}
+
+.leetcode-tag {
+    background: #fff0df;
+
+    color: #c56e25;
+}
+
+
+/* =========================================
+   DIVIDER
+========================================= */
+
+.performance-section-divider {
+    width: 100%;
+
+    height: 1px;
+
+    background: #e8e4da;
+}
+
+
+/* =========================================
+   CHART SECTION
+========================================= */
+
+.performance-chart-section,
+.performance-recent-section {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid #e8e3d8;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 3px 12px rgba(
+            55,
+            50,
+            35,
+            0.035
+        );
+}
+
+
+/* =========================================
+   SUBSECTION HEADING
+========================================= */
+
+.subsection-heading {
+    min-height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 16px 20px;
+
+    border-bottom: 1px solid #ece8df;
+
+    background: #fffefa;
+}
+
+.subsection-heading span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #c9782b;
+
+    font-size: 8px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+.subsection-heading h3 {
+    margin: 0;
+
+    color: #303530;
+
+    font-size: 15px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.performance-loading {
+    min-height: 400px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #777c75;
+}
+
+.performance-loading h2 {
+    margin: 15px 0 5px;
+
+    color: #353a35;
+
+    font-size: 20px;
+}
+
+.performance-loading p {
+    margin: 0;
+
+    color: #7d827b;
+
+    font-size: 13px;
+}
+
+.loading-spinner {
+    width: 34px;
+    height: 34px;
+
+    border: 3px solid #e8e3d8;
+
+    border-top-color: #347744;
+
+    border-right-color: #e28a32;
+
+    border-radius: 50%;
+
+    animation:
+        performance-spin
+        0.8s linear infinite;
+}
+
+@keyframes performance-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .performance-header {
+        align-items: flex-start;
+    }
+
+    .performance-platform-section {
+        padding: 22px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .performance-page {
+        gap: 20px;
+
+        padding-bottom: 30px;
+    }
+
+    .performance-header {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .performance-header h1 {
+        font-size: 27px;
+    }
+
+    .performance-header p {
+        font-size: 13px;
+    }
+
+    .performance-total {
+        width: 100%;
+
+        text-align: left;
+    }
+
+    .performance-platform-section {
+        padding: 18px;
+
+        border-radius: 14px;
+
+        gap: 16px;
+    }
+
+    .platform-heading {
+        gap: 11px;
+    }
+
+    .platform-icon {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 10px;
+    }
+
+    .platform-heading h2 {
+        font-size: 19px;
+    }
+
+    .platform-heading p {
+        font-size: 11px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .performance-header h1 {
+        font-size: 24px;
+    }
+
+    .performance-platform-section {
+        padding: 14px;
+    }
+
+    .subsection-heading {
+        min-height: 64px;
+
+        padding: 13px 15px;
+    }
+
+    .subsection-heading h3 {
+        font-size: 14px;
+    }
+}

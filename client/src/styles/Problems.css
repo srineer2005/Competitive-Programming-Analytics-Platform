@@ -1,0 +1,9 @@
+.problems-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.problems-page h1 {
+    margin-bottom: 30px;
+}
