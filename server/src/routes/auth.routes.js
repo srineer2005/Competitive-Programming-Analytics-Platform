@@ -8,6 +8,7 @@ const {
     reset,
     login,
     me,
+    googleVerify,
 } = require("../controllers/auth.controller");
 
 const auth = require("../middleware/auth.middleware");
@@ -52,6 +53,10 @@ router.post(
     "/login",
     validate(loginSchema),
     login
+);
+router.post(
+    "/google",
+    googleVerify
 );
 
 module.exports = router;

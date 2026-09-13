@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-
+const { OAuth2Client } = require("google-auth-library");
 const { generateToken } = require("../utils/jwt");
 const HTTP_STATUS = require("../constants/httpStatus");
 const MESSAGES = require("../constants/messages");
@@ -17,10 +17,10 @@ const {
     createUser,
     updateEmailVerification,
     updatePasswordReset,
+    markUserAsVerified,
 } = require("../repositories/user.repository");
 
 const {
-    sendVerificationEmail,
     sendPasswordResetEmail,
 } = require("./email.service");
 
@@ -77,12 +77,6 @@ const registerUser = async (userData) => {
     };
 
     const createdUser = await createUser(newUser);
-
-    await sendVerificationEmail(
-        normalizedEmail,
-        normalizedUsername,
-        verificationToken
-    );
 
     return {
         user: createdUser,
@@ -169,15 +163,9 @@ const resendVerificationEmail = async (email) => {
         verificationTokenExpires
     );
 
-    await sendVerificationEmail(
-        normalizedEmail,
-        user.username,
-        verificationToken
-    );
-
     return {
         message:
-            "A new verification email has been sent.",
+            "A new verification email has been generated.",
     };
 };
 
@@ -302,7 +290,7 @@ const loginUser = async (loginData) => {
     if (!user.isEmailVerified) {
         throw new ApiError(
             HTTP_STATUS.FORBIDDEN,
-            "Please verify your email before logging in."
+            "Please verify your account before logging in."
         );
     }
 
@@ -317,7 +305,62 @@ const loginUser = async (loginData) => {
         token,
     };
 };
+const googleVerifyUser = async (credential, expectedEmail) => {
+    const client = new OAuth2Client(
+        process.env.GOOGLE_CLIENT_ID
+    );
 
+    const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload || !payload.email || !payload.email_verified) {
+        throw new ApiError(
+            HTTP_STATUS.UNAUTHORIZED,
+            "Google account email is not verified."
+        );
+    }
+
+    const googleEmail = payload.email
+        .trim()
+        .toLowerCase();
+
+    const accountEmail = expectedEmail
+        .trim()
+        .toLowerCase();
+
+    if (googleEmail !== accountEmail) {
+        throw new ApiError(
+            HTTP_STATUS.FORBIDDEN,
+            "Google account email does not match your registered email."
+        );
+    }
+
+    const user = await findUserByEmail(accountEmail);
+
+    if (!user) {
+        throw new ApiError(
+            HTTP_STATUS.NOT_FOUND,
+            "No account found with this email."
+        );
+    }
+
+    const verifiedUser = await markUserAsVerified(
+        user._id
+    );
+
+    const token = generateToken({
+        id: verifiedUser._id,
+    });
+
+    return {
+        user: verifiedUser,
+        token,
+    };
+};
 const getCurrentUser = async (userId) => {
     const user = await findUserById(userId);
 
@@ -339,4 +382,6 @@ module.exports = {
     resetPassword,
     loginUser,
     getCurrentUser,
+    markUserAsVerified,
+    googleVerifyUser,
 };

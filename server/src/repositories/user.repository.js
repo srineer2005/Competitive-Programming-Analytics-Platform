@@ -70,6 +70,19 @@ const updateEmailVerification = async (
         }
     );
 };
+const markUserAsVerified = async (userId) => {
+    return await User.findByIdAndUpdate(
+        userId,
+        {
+            isEmailVerified: true,
+            emailVerificationToken: "",
+            emailVerificationExpires: null,
+        },
+        {
+            new: true,
+        }
+    ).select("-password");
+};
 
 const updatePasswordReset = async (
     userId,
@@ -100,4 +113,5 @@ module.exports = {
     updateCodingProfiles,
     updateEmailVerification,
     updatePasswordReset,
+    markUserAsVerified,
 };

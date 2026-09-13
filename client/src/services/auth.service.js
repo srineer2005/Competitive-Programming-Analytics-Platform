@@ -18,7 +18,12 @@ export const resendVerificationEmail = async (email) => {
 
     return response.data;
 };
-
+export const googleVerifyUser = (credential, expectedEmail) => {
+    return api.post("/auth/google", {
+        credential,
+        expectedEmail,
+    });
+};
 export const forgotPassword = async (email) => {
     const response = await api.post(
         "/auth/forgot-password",

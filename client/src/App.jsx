@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-
+import GoogleVerify from "./pages/GoogleVerify";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import Register from "./pages/Register";
@@ -18,6 +18,10 @@ function App() {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route
+    path="/google-verify"
+    element={<GoogleVerify />}
+/>
             <Route
                 path="/verify-email"
                 element={<VerifyEmail />}
