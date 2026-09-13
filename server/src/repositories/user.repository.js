@@ -12,11 +12,7 @@ const findUserByEmailWithPassword = async (email) => {
     return await User.findOne({ email }).select("+password");
 };
 
-const findUserByVerificationToken = async (token) => {
-    return await User.findOne({
-        emailVerificationToken: token,
-    });
-};
+
 
 const findUserByPasswordResetToken = async (token) => {
     return await User.findOne({
@@ -105,7 +101,6 @@ module.exports = {
     findUserByEmail,
     findUserByUsername,
     findUserByEmailWithPassword,
-    findUserByVerificationToken,
     findUserByPasswordResetToken,
     createUser,
     findUserById,

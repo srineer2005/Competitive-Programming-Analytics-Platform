@@ -11,11 +11,9 @@ const {
     findUserByEmail,
     findUserByUsername,
     findUserByEmailWithPassword,
-    findUserByVerificationToken,
     findUserByPasswordResetToken,
     findUserById,
     createUser,
-    updateEmailVerification,
     updatePasswordReset,
     markUserAsVerified,
 } = require("../repositories/user.repository");
@@ -83,91 +81,9 @@ const registerUser = async (userData) => {
     };
 };
 
-const verifyEmail = async (token) => {
-    if (!token) {
-        throw new ApiError(
-            HTTP_STATUS.BAD_REQUEST,
-            "Verification token is required."
-        );
-    }
 
-    const user =
-        await findUserByVerificationToken(token);
 
-    if (!user) {
-        throw new ApiError(
-            HTTP_STATUS.BAD_REQUEST,
-            "Invalid verification token."
-        );
-    }
 
-    if (user.isEmailVerified) {
-        return {
-            message: "Email is already verified.",
-        };
-    }
-
-    if (
-        !user.emailVerificationExpires ||
-        user.emailVerificationExpires < new Date()
-    ) {
-        throw new ApiError(
-            HTTP_STATUS.BAD_REQUEST,
-            "Verification token has expired."
-        );
-    }
-
-    user.isEmailVerified = true;
-    user.emailVerificationToken = "";
-    user.emailVerificationExpires = null;
-
-    await user.save();
-
-    return {
-        message: "Email verified successfully.",
-    };
-};
-
-const resendVerificationEmail = async (email) => {
-    const normalizedEmail =
-        email.trim().toLowerCase();
-
-    const user =
-        await findUserByEmail(normalizedEmail);
-
-    if (!user) {
-        throw new ApiError(
-            HTTP_STATUS.NOT_FOUND,
-            "No account found with this email."
-        );
-    }
-
-    if (user.isEmailVerified) {
-        throw new ApiError(
-            HTTP_STATUS.BAD_REQUEST,
-            "This email is already verified."
-        );
-    }
-
-    const verificationToken =
-        crypto.randomBytes(32).toString("hex");
-
-    const verificationTokenExpires =
-        new Date(
-            Date.now() + 24 * 60 * 60 * 1000
-        );
-
-    await updateEmailVerification(
-        user._id,
-        verificationToken,
-        verificationTokenExpires
-    );
-
-    return {
-        message:
-            "A new verification email has been generated.",
-    };
-};
 
 const forgotPassword = async (email) => {
     const normalizedEmail =
@@ -376,8 +292,6 @@ const getCurrentUser = async (userId) => {
 
 module.exports = {
     registerUser,
-    verifyEmail,
-    resendVerificationEmail,
     forgotPassword,
     resetPassword,
     loginUser,

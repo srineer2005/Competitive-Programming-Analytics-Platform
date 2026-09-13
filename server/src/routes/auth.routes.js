@@ -2,7 +2,6 @@ const express = require("express");
 
 const {
     register,
-    verify,
     resendVerification,
     forgot,
     reset,
@@ -29,10 +28,6 @@ router.post(
     register
 );
 
-router.get(
-    "/verify-email",
-    verify
-);
 
 router.post(
     "/resend-verification",

@@ -3,8 +3,6 @@ const MESSAGES = require("../constants/messages");
 
 const {
     registerUser,
-    verifyEmail,
-    resendVerificationEmail,
     forgotPassword,
     resetPassword,
     loginUser,
@@ -27,31 +25,6 @@ const register = asyncHandler(async (req, res) => {
     );
 });
 
-const verify = asyncHandler(async (req, res) => {
-    const result = await verifyEmail(req.query.token);
-
-    return res.status(HTTP_STATUS.OK).json(
-        new ApiResponse(
-            HTTP_STATUS.OK,
-            null,
-            result.message
-        )
-    );
-});
-
-const resendVerification = asyncHandler(async (req, res) => {
-    const result = await resendVerificationEmail(
-        req.body.email
-    );
-
-    return res.status(HTTP_STATUS.OK).json(
-        new ApiResponse(
-            HTTP_STATUS.OK,
-            null,
-            result.message
-        )
-    );
-});
 
 const forgot = asyncHandler(async (req, res) => {
     const result = await forgotPassword(
@@ -124,8 +97,6 @@ const googleVerify = asyncHandler(async (req, res) => {
 
 module.exports = {
     register,
-    verify,
-    resendVerification,
     forgot,
     reset,
     login,

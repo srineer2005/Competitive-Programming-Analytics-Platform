@@ -3,7 +3,7 @@ import GoogleVerify from "./pages/GoogleVerify";
 import Login from "./pages/Login";
 import ResetPassword from "./pages/ResetPassword";
 import Register from "./pages/Register";
-import VerifyEmail from "./pages/VerifyEmail";
+
 import Dashboard from "./pages/Dashboard";
 import Performance from "./pages/Performance";
 import Contests from "./pages/Contests";
@@ -22,10 +22,6 @@ function App() {
     path="/google-verify"
     element={<GoogleVerify />}
 />
-            <Route
-                path="/verify-email"
-                element={<VerifyEmail />}
-            />
             <Route
     path="/reset-password"
     element={<ResetPassword />}
