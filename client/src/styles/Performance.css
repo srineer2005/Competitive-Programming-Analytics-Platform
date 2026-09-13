@@ -1,6 +1,10 @@
 /* =========================================
    PERFORMANCE PAGE
 ========================================= */
+.performance-page,
+.performance-page * {
+    box-sizing: border-box;
+}
 
 .performance-page {
     width: 100%;
