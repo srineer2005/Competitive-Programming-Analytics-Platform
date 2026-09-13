@@ -95,25 +95,22 @@ const googleVerify = asyncHandler(async (req, res) => {
         )
     );
 });
-const googlePasswordResetController = async (req, res, next) => {
-    try {
-        const { credential, expectedEmail } = req.body;
+const googlePasswordResetController = asyncHandler(async (req, res) => {
+    const { credential, expectedEmail } = req.body;
 
-        const result = await googlePasswordReset(
-            credential,
-            expectedEmail
-        );
+    const result = await googlePasswordReset(
+        credential,
+        expectedEmail
+    );
 
-        res.status(HTTP_STATUS.OK).json({
-            success: true,
-            data: result,
-            message: "Google verification successful.",
-        });
-    } catch (error) {
-        next(error);
-    }
-};
-
+    return res.status(HTTP_STATUS.OK).json(
+        new ApiResponse(
+            HTTP_STATUS.OK,
+            result,
+            "Google verification successful."
+        )
+    );
+});
 
 module.exports = {
     register,
