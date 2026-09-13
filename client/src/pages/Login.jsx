@@ -671,18 +671,23 @@ setErrorMessage(message);
     cursor: not-allowed;
 }
                 @media (max-width: 600px) {
-                    .login-content {
-                        width: min(
-                            calc(100vw - 28px),
-                            420px
-                        );
-                    }
+    .login-page {
+        background-size: cover;
+        background-position: center center;
+    }
 
-                    .login-card {
-                        padding-left: 20px;
-                        padding-right: 20px;
-                    }
-                }
+    .login-content {
+        width: min(
+            calc(100vw - 28px),
+            420px
+        );
+    }
+
+    .login-card {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
             `}</style>
 
             <div className="login-page">

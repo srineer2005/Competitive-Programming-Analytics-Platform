@@ -486,8 +486,14 @@
     }
 }
 
-
 @media (max-width: 480px) {
+
+    .performance-page {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        overflow-x: hidden;
+    }
 
     .performance-header h1 {
         font-size: 24px;
