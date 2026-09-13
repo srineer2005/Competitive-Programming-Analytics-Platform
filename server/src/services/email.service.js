@@ -1,17 +1,6 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendVerificationEmail = async (
     email,
@@ -22,13 +11,12 @@ const sendVerificationEmail = async (
         `${process.env.CLIENT_URL}/verify-email?token=${verificationToken}`;
 
     console.log("📧 Sending verification email...");
-    console.log("From:", process.env.GMAIL_USER);
     console.log("To:", email);
 
     try {
-        const info = await transporter.sendMail({
-            from: `"CP Analytics" <${process.env.GMAIL_USER}>`,
-            to: email,
+        const { data, error } = await resend.emails.send({
+            from: "CP Analytics <onboarding@resend.dev>",
+            to: [email],
             subject: "Verify your CP Analytics account",
             html: `
                 <div style="
@@ -69,17 +57,23 @@ const sendVerificationEmail = async (
             `,
         });
 
-        console.log("✅ Verification email sent:", info.messageId);
+        if (error) {
+            console.error("❌ Verification email failed:");
+            console.error(error);
+            throw new Error(error.message || "Failed to send email");
+        }
 
-        return info;
+        console.log("✅ Verification email sent:", data.id);
+
+        return data;
     } catch (error) {
         console.error("❌ Verification email failed:");
-        console.error("Code:", error.code);
         console.error("Message:", error.message);
 
         throw error;
     }
 };
+
 
 const sendPasswordResetEmail = async (
     email,
@@ -89,10 +83,13 @@ const sendPasswordResetEmail = async (
     const resetUrl =
         `${process.env.CLIENT_URL}/reset-password?token=${resetToken}`;
 
+    console.log("📧 Sending password reset email...");
+    console.log("To:", email);
+
     try {
-        const info = await transporter.sendMail({
-            from: `"CP Analytics" <${process.env.GMAIL_USER}>`,
-            to: email,
+        const { data, error } = await resend.emails.send({
+            from: "CP Analytics <onboarding@resend.dev>",
+            to: [email],
             subject: "Reset your CP Analytics password",
             html: `
                 <div style="
@@ -135,17 +132,23 @@ const sendPasswordResetEmail = async (
             `,
         });
 
-        console.log("✅ Password reset email sent:", info.messageId);
+        if (error) {
+            console.error("❌ Password reset email failed:");
+            console.error(error);
+            throw new Error(error.message || "Failed to send email");
+        }
 
-        return info;
+        console.log("✅ Password reset email sent:", data.id);
+
+        return data;
     } catch (error) {
         console.error("❌ Password reset email failed:");
-        console.error("Code:", error.code);
         console.error("Message:", error.message);
 
         throw error;
     }
 };
+
 
 module.exports = {
     sendVerificationEmail,
