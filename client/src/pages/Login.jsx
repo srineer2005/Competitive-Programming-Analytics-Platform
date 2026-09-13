@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Navigate, Link } from "react-router-dom";
 
-import {
-    loginUser,
-    forgotPassword,
-} from "../services/auth.service";
+import { loginUser } from "../services/auth.service";
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -79,38 +76,21 @@ setErrorMessage(message);
     };
 
     
-    const handleForgotPassword = async () => {
+    const handleForgotPassword = () => {
     if (!formData.email.trim()) {
         setErrorMessage("Enter your email address first.");
         return;
     }
 
-    try {
-        setLoading(true);
-        setErrorMessage("");
-        setSuccessMessage("");
+    setErrorMessage("");
+    setSuccessMessage("");
 
-        const response = await forgotPassword(
-            formData.email
-        );
-
-        setSuccessMessage(
-            response.message ||
-                "A password reset email has been sent."
-        );
-    } catch (error) {
-        console.error(
-            "Forgot password failed:",
-            error
-        );
-
-        setErrorMessage(
-            error.response?.data?.message ||
-                "Unable to send password reset email."
-        );
-    } finally {
-        setLoading(false);
-    }
+    navigate("/google-verify", {
+        state: {
+            email: formData.email,
+            fromPasswordReset: true,
+        },
+    });
 };
 
     return (

@@ -8,6 +8,7 @@ const {
     loginUser,
     getCurrentUser,
     googleVerifyUser,
+    googlePasswordReset,
 } = require("../services/auth.service");
 
 const ApiResponse = require("../utils/ApiResponse");
@@ -94,6 +95,25 @@ const googleVerify = asyncHandler(async (req, res) => {
         )
     );
 });
+const googlePasswordResetController = async (req, res, next) => {
+    try {
+        const { credential, expectedEmail } = req.body;
+
+        const result = await googlePasswordReset(
+            credential,
+            expectedEmail
+        );
+
+        res.status(HTTP_STATUS.OK).json({
+            success: true,
+            data: result,
+            message: "Google verification successful.",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 module.exports = {
     register,
@@ -102,4 +122,5 @@ module.exports = {
     login,
     me,
     googleVerify,
+    googlePasswordResetController,
 };

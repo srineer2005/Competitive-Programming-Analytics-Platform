@@ -32,6 +32,21 @@ export const googleVerifyUser = async (
 
     return response.data;
 };
+export const googlePasswordReset = async (
+    credential,
+    expectedEmail
+) => {
+    const response = await api.post(
+        "/auth/google-password-reset",
+        {
+            credential,
+            expectedEmail,
+        }
+    );
+
+    return response.data;
+};
+
 export const forgotPassword = async (email) => {
     const response = await api.post(
         "/auth/forgot-password",

@@ -277,6 +277,71 @@ const googleVerifyUser = async (credential, expectedEmail) => {
         token,
     };
 };
+const googlePasswordReset = async (
+    credential,
+    expectedEmail
+) => {
+    const client = new OAuth2Client(
+        process.env.GOOGLE_CLIENT_ID
+    );
+
+    const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload || !payload.email || !payload.email_verified) {
+        throw new ApiError(
+            HTTP_STATUS.UNAUTHORIZED,
+            "Google account email is not verified."
+        );
+    }
+
+    const googleEmail = payload.email
+        .trim()
+        .toLowerCase();
+
+    const accountEmail = expectedEmail
+        .trim()
+        .toLowerCase();
+
+    if (googleEmail !== accountEmail) {
+        throw new ApiError(
+            HTTP_STATUS.FORBIDDEN,
+            "Google account email does not match your registered email."
+        );
+    }
+
+    const user = await findUserByEmail(accountEmail);
+
+    if (!user) {
+        throw new ApiError(
+            HTTP_STATUS.NOT_FOUND,
+            "No account found with this email."
+        );
+    }
+
+    const resetToken =
+        crypto.randomBytes(32).toString("hex");
+
+    const resetTokenExpires =
+        new Date(
+            Date.now() + 30 * 60 * 1000
+        );
+
+    await updatePasswordReset(
+        user._id,
+        resetToken,
+        resetTokenExpires
+    );
+
+    return {
+        resetToken,
+    };
+};
+
 const getCurrentUser = async (userId) => {
     const user = await findUserById(userId);
 
@@ -298,4 +363,5 @@ module.exports = {
     getCurrentUser,
     markUserAsVerified,
     googleVerifyUser,
+    googlePasswordReset,
 };

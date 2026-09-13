@@ -8,6 +8,7 @@ const {
     login,
     me,
     googleVerify,
+    googlePasswordResetController,
 } = require("../controllers/auth.controller");
 
 const auth = require("../middleware/auth.middleware");
@@ -42,6 +43,10 @@ router.post(
 router.post(
     "/reset-password",
     reset
+);
+router.post(
+    "/google-password-reset",
+    googlePasswordResetController
 );
 
 router.post(

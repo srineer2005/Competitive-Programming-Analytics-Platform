@@ -1,13 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { googleVerifyUser } from "../services/auth.service";
+import {
+    googleVerifyUser,
+    googlePasswordReset,
+} from "../services/auth.service";
 
 function GoogleVerify() {
     const location = useLocation();
+    const expectedEmail = location.state?.email;
+const fromPasswordReset =
+    location.state?.fromPasswordReset;
     const navigate = useNavigate();
     const googleButtonRef = useRef(null);
 
-    const expectedEmail = location.state?.email;
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -32,23 +37,41 @@ function GoogleVerify() {
                         setLoading(true);
                         setError("");
 
-                        const result =
-                            await googleVerifyUser(
-                                response.credential,
-                                expectedEmail
-                            );
+                        let result;
 
-                        localStorage.setItem(
-                            "token",
-                            result.data.token
-                        );
+if (fromPasswordReset) {
+    result = await googlePasswordReset(
+        response.credential,
+        expectedEmail
+    );
 
-                        localStorage.setItem(
-                            "user",
-                            JSON.stringify(result.data.user)
-                        );
+    navigate(
+        `/reset-password?token=${encodeURIComponent(
+            result.data.resetToken
+        )}`
+    );
 
-                        navigate("/dashboard");
+    return;
+}
+
+result = await googleVerifyUser(
+    response.credential,
+    expectedEmail
+);
+
+localStorage.setItem(
+    "token",
+    result.data.token
+);
+
+localStorage.setItem(
+    "user",
+    JSON.stringify(result.data.user)
+);
+
+navigate("/dashboard");
+
+
                     } catch (err) {
                         setError(
                             err.response?.data?.message ||
