@@ -3,7 +3,6 @@ import { useNavigate, Navigate, Link } from "react-router-dom";
 
 import {
     loginUser,
-    resendVerificationEmail,
     forgotPassword,
 } from "../services/auth.service";
 
@@ -14,7 +13,6 @@ function Login() {
     });
 
     const [loading, setLoading] = useState(false);
-    const [resending, setResending] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
 
@@ -61,52 +59,26 @@ function Login() {
         } catch (error) {
             console.error("Login failed:", error);
 
-            const message =
-                error.response?.data?.message ||
-                "Login failed. Please check your credentials.";
+            if (error.response?.status === 403) {
+    navigate("/google-verify", {
+        state: {
+            email: formData.email,
+        },
+    });
+    return;
+}
 
-            setErrorMessage(message);
+const message =
+    error.response?.data?.message ||
+    "Login failed. Please check your credentials.";
+
+setErrorMessage(message);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleResendVerification = async () => {
-        if (!formData.email.trim()) {
-            setErrorMessage(
-                "Enter your email address first."
-            );
-            return;
-        }
-
-        try {
-            setResending(true);
-            setErrorMessage("");
-            setSuccessMessage("");
-
-            const response =
-                await resendVerificationEmail(
-                    formData.email
-                );
-
-            setSuccessMessage(
-                response.message ||
-                    "A new verification email has been sent."
-            );
-        } catch (error) {
-            console.error(
-                "Resend verification failed:",
-                error
-            );
-
-            setErrorMessage(
-                error.response?.data?.message ||
-                    "Unable to resend verification email."
-            );
-        } finally {
-            setResending(false);
-        }
-    };
+    
     const handleForgotPassword = async () => {
     if (!formData.email.trim()) {
         setErrorMessage("Enter your email address first.");

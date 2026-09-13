@@ -46,9 +46,12 @@ function Register() {
     password: formData.password,
 });
 
-            alert("Registration successful!");
-
-            navigate("/login");
+            navigate("/google-verify", {
+    state: {
+        email: formData.email,
+        fromRegister: true,
+    },
+});
         } catch (error) {
             console.error("Registration failed:", error);
 
