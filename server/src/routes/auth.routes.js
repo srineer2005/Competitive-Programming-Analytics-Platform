@@ -2,7 +2,6 @@ const express = require("express");
 
 const {
     register,
-    resendVerification,
     forgot,
     reset,
     login,
@@ -29,11 +28,6 @@ router.post(
     register
 );
 
-
-router.post(
-    "/resend-verification",
-    resendVerification
-);
 
 router.post(
     "/forgot-password",
